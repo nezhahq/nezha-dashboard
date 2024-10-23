@@ -10,9 +10,11 @@ import { DateTime } from "luxon";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { navRouter } from "@/lib/nav-router";
+import Link from "next/link";
 
 function Header() {
   const t = useTranslations("Header");
@@ -86,13 +88,13 @@ function Overview() {
     <section className={"flex flex-col"}>
       <p className="text-sm font-semibold">👋 晚上好, Hamster</p>
       <div className="flex items-center gap-1.5">
-        <p className="text-sm font-medium opacity-50">
+        <p className="text-[13px] font-medium opacity-50">
           {t("p_2390-2457_wherethetimeis")}
         </p>
         {mouted ? (
-          <p className="opacity-1 text-sm font-medium">{timeString}</p>
+          <p className="opacity-1 text-[13px] font-medium">{timeString}</p>
         ) : (
-          <Skeleton className="h-[20px] w-[50px] rounded-[5px] bg-muted-foreground/10 animate-none"></Skeleton>
+          <Skeleton className="h-[19px] w-[50px] rounded-[5px] bg-muted-foreground/10 animate-none"></Skeleton>
         )}
       </div>
     </section>
@@ -101,33 +103,40 @@ function Overview() {
 
 
 function TabNav() {
-  const tabs = ["服务器", "服务", "任务", "告警", "内网穿透", "设置"];
-  const [currentTab, setCurrentTab] = useState("机器");
+  const locale = useLocale();
+  const tabs = navRouter
+  const nowPath = usePathname()
+  const [path, setPath] = useState('')
+
+  useEffect(() => {
+    const realPath = nowPath.replace(`/${locale}`, '')
+    setPath(realPath)
+  }, [nowPath])
 
   return (
-    <div className="z-50 flex flex-col items-start rounded-[50px]">
-      <div className="flex items-center gap-1 p-[3px]">
+    <div className="z-50 flex flex-col items-start w-full overflow-x-scroll scrollbar-hidden">
+      <div className="flex items-center gap-1">
         {tabs.map((tab) => (
-          <div
-            key={tab}
-            onClick={() => setCurrentTab(tab)}
+          <Link
+            key={tab.name}
+            href={`/${locale}/${tab.path}`}
             className={cn(
               "relative cursor-pointer rounded-3xl px-2.5 py-[8px] text-sm font-[600] transition-all duration-500",
-              currentTab === tab
+              path === tab.path
                 ? "text-black dark:text-white"
                 : "text-stone-400 dark:text-stone-500"
             )}
           >
             <div className="relative z-20 flex items-center gap-1">
-              <p className="whitespace-nowrap">{tab}</p>
+              <p className="whitespace-nowrap">{tab.name}</p>
             </div>
-            {currentTab === tab && (
+            {path === tab.path && (
               <motion.div
                 layoutId="tab-underline"
                 className="absolute bottom-0 left-0 right-0 h-[2px] bg-black dark:bg-white"
               />
             )}
-          </div>
+          </Link>
         ))}
       </div>
     </div>

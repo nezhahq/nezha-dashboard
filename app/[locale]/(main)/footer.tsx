@@ -3,7 +3,7 @@ import { useTranslations } from "next-intl";
 export default function Footer() {
   const t = useTranslations("Footer");
   return (
-    <footer className="mx-auto w-full max-w-5xl">
+    <footer className="mx-auto w-full max-w-5xl px-4 lg:px-0 pb-4">
       <section className="flex flex-col">
         <p className="mt-3 flex gap-1 text-[13px] font-light tracking-tight text-neutral-600/50 dark:text-neutral-300/50">
           {t("p_146-598_Findthecodeon")}{" "}
