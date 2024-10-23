@@ -95,14 +95,14 @@ const data: Payment[] = [
     },
 ]
 
-export type Payment = {
+type Payment = {
     id: string
     amount: number
     status: "pending" | "processing" | "success" | "failed"
     email: string
 }
 
-export const columns: ColumnDef<Payment>[] = [
+const columns: ColumnDef<Payment>[] = [
     {
         id: "select",
         // header: ({ table }) => (
@@ -215,7 +215,7 @@ export const columns: ColumnDef<Payment>[] = [
     },
 ]
 
-export function DataTableDemo() {
+function DataTableDemo() {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
         []
