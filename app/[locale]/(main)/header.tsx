@@ -5,12 +5,14 @@ import { ModeToggle } from "@/components/ThemeSwitcher";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import getEnv from "@/lib/env-entry";
+import { cn } from "@/lib/utils";
 import { DateTime } from "luxon";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 
 function Header() {
   const t = useTranslations("Header");
@@ -22,48 +24,39 @@ function Header() {
   const locale = useLocale();
 
   return (
-    <div className="mx-auto w-full max-w-5xl">
-      <section className="flex items-center justify-between">
-        <section
-          onClick={() => {
-            router.push(`/${locale}/`);
-          }}
-          className="flex cursor-pointer items-center text-base font-medium"
-        >
-          <div className="mr-1 flex flex-row items-center justify-start">
-            <Image
-              width={40}
-              height={40}
-              unoptimized
-              alt="apple-touch-icon"
-              src={customLogo ? customLogo : "/apple-touch-icon.png"}
-              className="relative !m-0 border-2 border-transparent h-6 w-6 object-cover object-top !p-0"
-            />
-          </div>
-          {customTitle ? customTitle : "NezhaDash"}
-          <Separator
-            orientation="vertical"
-            className="mx-2 hidden h-4 w-[1px] md:block"
-          />
-          <p className="hidden text-sm font-medium opacity-40 md:block">
-            {customDescription
-              ? customDescription
-              : t("p_1079-1199_Simpleandbeautifuldashbo")}
-          </p>
+    <div className="w-full dark:bg-black/40 bg-muted border-b-[1px]">
+      <div className="max-w-5xl mx-auto pt-8 px-4 lg:px-0 flex flex-col gap-4">
+        <section className="flex items-center justify-between">
+          <section
+            className="flex items-center text-base font-medium"
+          >
+            <div className="mr-1 flex flex-row items-center justify-start">
+              <Image
+                width={40}
+                height={40}
+                unoptimized
+                alt="apple-touch-icon"
+                src={customLogo ? customLogo : "/apple-touch-icon.png"}
+                className="relative !m-0 border-2 border-transparent h-6 w-6 object-cover object-top !p-0"
+              />
+            </div>
+            Nezha-Dashboard
+          </section>
+          <section className="flex items-center gap-2">
+            <LanguageSwitcher />
+            <ModeToggle />
+          </section>
         </section>
-        <section className="flex items-center gap-2">
-          <LanguageSwitcher />
-          <ModeToggle />
-        </section>
-      </section>
-      <Overview />
+        <Overview />
+        <TabNav />
+      </div>
     </div>
   );
 }
 
 // https://github.com/streamich/react-use/blob/master/src/useInterval.ts
 const useInterval = (callback: Function, delay?: number | null) => {
-  const savedCallback = useRef<Function>(() => {});
+  const savedCallback = useRef<Function>(() => { });
   useEffect(() => {
     savedCallback.current = callback;
   });
@@ -90,8 +83,8 @@ function Overview() {
     setTimeString(DateTime.now().setLocale("en-US").toLocaleString(timeOption));
   }, 1000);
   return (
-    <section className={"mt-10 flex flex-col md:mt-16"}>
-      <p className="text-base font-semibold">{t("p_2277-2331_Overview")}</p>
+    <section className={"flex flex-col"}>
+      <p className="text-sm font-semibold">👋 晚上好, Hamster</p>
       <div className="flex items-center gap-1.5">
         <p className="text-sm font-medium opacity-50">
           {t("p_2390-2457_wherethetimeis")}
@@ -105,4 +98,44 @@ function Overview() {
     </section>
   );
 }
+
+
+function TabNav() {
+  const tabs = ["服务器", "服务", "任务", "告警", "内网穿透", "设置"];
+  const [currentTab, setCurrentTab] = useState("机器");
+
+  return (
+    <div className="z-50 flex flex-col items-start rounded-[50px]">
+      <div className="flex items-center gap-1 p-[3px]">
+        {tabs.map((tab) => (
+          <div
+            key={tab}
+            onClick={() => setCurrentTab(tab)}
+            className={cn(
+              "relative cursor-pointer rounded-3xl px-2.5 py-[8px] text-sm font-[600] transition-all duration-500",
+              currentTab === tab
+                ? "text-black dark:text-white"
+                : "text-stone-400 dark:text-stone-500"
+            )}
+          >
+            <div className="relative z-20 flex items-center gap-1">
+              <p className="whitespace-nowrap">{tab}</p>
+            </div>
+            {currentTab === tab && (
+              <motion.div
+                layoutId="tab-underline"
+                className="absolute bottom-0 left-0 right-0 h-[2px] bg-black dark:bg-white"
+              />
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+
+
+
+
 export default Header;
