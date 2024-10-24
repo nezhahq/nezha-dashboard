@@ -6,6 +6,7 @@ const withNextIntl = createNextIntlPlugin();
 const nextConfig = {
   output: "export",
   basePath: "/dashboard",
+  assetPrefix: "/dashboard/",
   distDir: "dist",
   reactStrictMode: true,
   logging: {
