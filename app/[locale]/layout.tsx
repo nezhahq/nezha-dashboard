@@ -1,4 +1,5 @@
 // @auto-i18n-check. Please do not delete the line.
+import { AuthProvider } from "@/context/AuthContext";
 import { locales } from "@/i18n-metadata";
 import getEnv from "@/lib/env-entry";
 import { cn } from "@/lib/utils";
@@ -74,7 +75,9 @@ export default function LocaleLayout({
           disableTransitionOnChange
         >
           <NextIntlClientProvider locale={locale} messages={messages}>
-            {children}
+            <AuthProvider>
+              {children}
+            </AuthProvider>
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>

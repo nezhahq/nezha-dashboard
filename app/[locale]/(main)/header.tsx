@@ -15,12 +15,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { navRouter } from "@/lib/nav-router";
 import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
 
 function Header() {
-  const t = useTranslations("Header");
   const customLogo = getEnv("NEXT_PUBLIC_CustomLogo");
-  const customTitle = getEnv("NEXT_PUBLIC_CustomTitle");
-  const customDescription = getEnv("NEXT_PUBLIC_CustomDescription");
 
   const router = useRouter();
   const locale = useLocale();
@@ -73,6 +71,7 @@ const useInterval = (callback: Function, delay?: number | null) => {
 function Overview() {
   const t = useTranslations("Overview");
   const [mouted, setMounted] = useState(false);
+  const { user, loading } = useAuth();
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -86,7 +85,9 @@ function Overview() {
   }, 1000);
   return (
     <section className={"flex flex-col"}>
-      <p className="text-sm font-semibold">👋 晚上好, Hamster</p>
+      {loading && <Skeleton className="h-[19px] w-[50px] rounded-[5px] bg-muted-foreground/10 animate-none"></Skeleton>}
+      {(!loading && user) && <p className="text-sm font-semibold">👋 晚上好, {user?.username}</p>}
+      {(!loading && !user) && <p className="text-sm font-semibold">请先登录</p>}
       <div className="flex items-center gap-1.5">
         <p className="text-[13px] font-medium opacity-50">
           {t("p_2390-2457_wherethetimeis")}
