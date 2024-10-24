@@ -22,6 +22,7 @@ const withPWA = withPWAInit({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "export",
+  distDir: 'dist',
   reactStrictMode: true,
   logging: {
     fetches: {
