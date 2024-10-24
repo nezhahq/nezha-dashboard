@@ -60,10 +60,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ username, password }),
+                body: JSON.stringify({ username: username, password: password }),
             });
 
             const data: LoginResponse = await response.json();
+
+            console.log(data)
 
             if (data.success) {
                 localStorage.setItem('token', data.data.token);

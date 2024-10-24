@@ -16,12 +16,11 @@ import { motion } from "framer-motion";
 import { navRouter } from "@/lib/nav-router";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
+import { Button } from "@/components/ui/button";
+import { LogOutIcon } from "lucide-react";
 
 function Header() {
   const customLogo = getEnv("NEXT_PUBLIC_CustomLogo");
-
-  const router = useRouter();
-  const locale = useLocale();
 
   return (
     <div className="w-full dark:bg-black/40 bg-muted border-b-[1px]">
@@ -71,7 +70,7 @@ const useInterval = (callback: Function, delay?: number | null) => {
 function Overview() {
   const t = useTranslations("Overview");
   const [mouted, setMounted] = useState(false);
-  const { user, loading } = useAuth();
+  const { user, loading, logout } = useAuth();
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -86,7 +85,7 @@ function Overview() {
   return (
     <section className={"flex flex-col"}>
       {loading && <Skeleton className="h-[19px] w-[50px] rounded-[5px] bg-muted-foreground/10 animate-none"></Skeleton>}
-      {(!loading && user) && <p className="text-sm font-semibold">👋 晚上好, {user?.username}</p>}
+      {(!loading && user) && <div className="flex items-center gap-1.5"><p className="text-sm font-semibold">👋 晚上好, {user?.username}</p><p className="text-xs font-semibold underline cursor-pointer" onClick={logout}>注销</p></div>}
       {(!loading && !user) && <p className="text-sm font-semibold">请先登录</p>}
       <div className="flex items-center gap-1.5">
         <p className="text-[13px] font-medium opacity-50">
@@ -113,6 +112,8 @@ function TabNav() {
     const realPath = nowPath.replace(`/${locale}`, '')
     setPath(realPath)
   }, [nowPath])
+
+
 
   return (
     <div className="z-50 flex flex-col items-start w-full overflow-x-scroll scrollbar-hidden">
