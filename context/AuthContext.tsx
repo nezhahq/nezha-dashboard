@@ -66,7 +66,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     password: string,
   ): Promise<LoginResult> => {
     try {
-      const response = await fetch("http://localhost:8008/api/v1/login", {
+      const response = await fetch("/api/v1/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
