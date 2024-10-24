@@ -2,22 +2,22 @@
 
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ModeToggle } from "@/components/ThemeSwitcher";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useAuth } from "@/context/AuthContext";
 import getEnv from "@/lib/env-entry";
+import { navRouter } from "@/lib/nav-router";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
+import { LogOutIcon } from "lucide-react";
 import { DateTime } from "luxon";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
-import { navRouter } from "@/lib/nav-router";
-import Link from "next/link";
-import { useAuth } from "@/context/AuthContext";
-import { Button } from "@/components/ui/button";
-import { LogOutIcon } from "lucide-react";
 
 function Header() {
   const customLogo = getEnv("NEXT_PUBLIC_CustomLogo");
@@ -26,9 +26,7 @@ function Header() {
     <div className="w-full dark:bg-black/40 bg-muted border-b-[1px]">
       <div className="max-w-5xl mx-auto pt-8 px-4 lg:px-0 flex flex-col gap-4">
         <section className="flex items-center justify-between">
-          <section
-            className="flex items-center text-base font-medium"
-          >
+          <section className="flex items-center text-base font-medium">
             <div className="mr-1 flex flex-row items-center justify-start">
               <Image
                 width={40}
@@ -55,7 +53,7 @@ function Header() {
 
 // https://github.com/streamich/react-use/blob/master/src/useInterval.ts
 const useInterval = (callback: Function, delay?: number | null) => {
-  const savedCallback = useRef<Function>(() => { });
+  const savedCallback = useRef<Function>(() => {});
   useEffect(() => {
     savedCallback.current = callback;
   });
@@ -84,9 +82,21 @@ function Overview() {
   }, 1000);
   return (
     <section className={"flex flex-col"}>
-      {loading && <Skeleton className="h-[19px] w-[50px] rounded-[5px] bg-muted-foreground/10 animate-none"></Skeleton>}
-      {(!loading && user) && <div className="flex items-center gap-1.5"><p className="text-sm font-semibold">👋 晚上好, {user?.username}</p><p className="text-xs font-semibold underline cursor-pointer" onClick={logout}>注销</p></div>}
-      {(!loading && !user) && <p className="text-sm font-semibold">请先登录</p>}
+      {loading && (
+        <Skeleton className="h-[19px] w-[50px] rounded-[5px] bg-muted-foreground/10 animate-none"></Skeleton>
+      )}
+      {!loading && user && (
+        <div className="flex items-center gap-1.5">
+          <p className="text-sm font-semibold">👋 晚上好, {user?.username}</p>
+          <p
+            className="text-xs font-semibold underline cursor-pointer"
+            onClick={logout}
+          >
+            注销
+          </p>
+        </div>
+      )}
+      {!loading && !user && <p className="text-sm font-semibold">请先登录</p>}
       <div className="flex items-center gap-1.5">
         <p className="text-[13px] font-medium opacity-50">
           {t("p_2390-2457_wherethetimeis")}
@@ -101,19 +111,16 @@ function Overview() {
   );
 }
 
-
 function TabNav() {
   const locale = useLocale();
-  const tabs = navRouter
-  const nowPath = usePathname()
-  const [path, setPath] = useState('')
+  const tabs = navRouter;
+  const nowPath = usePathname();
+  const [path, setPath] = useState("");
 
   useEffect(() => {
-    const realPath = nowPath.replace(`/${locale}`, '')
-    setPath(realPath)
-  }, [nowPath])
-
-
+    const realPath = nowPath.replace(`/${locale}`, "");
+    setPath(realPath);
+  }, [nowPath]);
 
   return (
     <div className="z-50 flex flex-col items-start w-full overflow-x-scroll scrollbar-hidden">
@@ -126,7 +133,7 @@ function TabNav() {
               "relative cursor-pointer rounded-3xl px-2.5 py-[8px] text-sm font-[600] transition-all duration-500",
               path === tab.path
                 ? "text-black dark:text-white"
-                : "text-stone-400 dark:text-stone-500"
+                : "text-stone-400 dark:text-stone-500",
             )}
           >
             <div className="relative z-20 flex items-center gap-1">
@@ -144,9 +151,5 @@ function TabNav() {
     </div>
   );
 }
-
-
-
-
 
 export default Header;

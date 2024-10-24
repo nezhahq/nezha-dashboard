@@ -5,7 +5,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-
 export function formatBytes(bytes: number, decimals: number = 2) {
   if (!+bytes) return "0 Bytes";
 
