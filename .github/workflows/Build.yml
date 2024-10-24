@@ -9,7 +9,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Ensure permission to create and modify Releases
+      contents: write
     steps:
       - name: Check out code
         uses: actions/checkout@v3
@@ -33,10 +33,11 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         with:
-          tag_name: ${{ github.ref }} # Use the current tag name
+          tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Release asset
         uses: actions/upload-release-asset@v1
@@ -45,6 +46,7 @@ jobs:
           asset_path: ./dist.zip
           asset_name: dist.zip
           asset_content_type: application/zip
+          token: ${{ secrets.GITHUB_TOKEN }}
   changelog:
     runs-on: ubuntu-latest
     steps:
