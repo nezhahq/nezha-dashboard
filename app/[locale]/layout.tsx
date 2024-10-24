@@ -18,6 +18,7 @@ const fontSans = FontSans({
   variable: "--font-sans",
 });
 
+
 const customTitle = getEnv("NEXT_PUBLIC_CustomTitle");
 const customDescription = getEnv("NEXT_PUBLIC_CustomDescription");
 
