@@ -5,7 +5,8 @@ const withNextIntl = createNextIntlPlugin();
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "export",
-  distDir: 'dist',
+  basePath: "/dashboard",
+  distDir: "dist",
   reactStrictMode: true,
   logging: {
     fetches: {
